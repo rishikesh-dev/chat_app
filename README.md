@@ -1,33 +1,38 @@
-# Chat App 🚀
+# 🗨️ Chat App
 
-A minimalist **one‑to‑one real‑time chat application** built with **Firebase** and **Java**, offering secure authentication, instant messaging, and a simple UI.
-
----
-
-## 🧰 Features
-
-- **Real-time messaging** with Firebase Realtime Database  
-- **Secure login** via Firebase Authentication (OTP / phone number)  
-- **One-to-one chat** between authenticated users  
-- Clean, intuitive UI for a seamless messaging experience  
+A clean and modern real-time **one-to-one chat application** built with **Flutter**, using **Supabase** as the backend and structured using **Clean Architecture** and **BLoC** for scalable state management.
 
 ---
 
-## ⚙️ Tech Stack
+## ✨ Features
 
-| Layer               | Technology                                  |
-|---------------------|---------------------------------------------|
-| Authentication      | Firebase Authentication (Phone + OTP)       |
-| Real-time Database  | Firebase Realtime Database                  |
-| Backend/Data Model  | Java                                        |
-| Front-end           | (Specify: Android / JavaFX / other)         |
-| Build Tools         | Gradle / Android Studio / Maven             |
+- 🔐 **Authentication** with Supabase (email/password)
+- 💬 **Real-time one-to-one messaging**
+- 😄 **Emoji picker** support
+- 🔔 **Toast notifications** via `toastification`
+- 💾 **Shared Preferences** for local data persistence (e.g., theme)
+- 🎨 Light/Dark mode support with theme persistence
+- 🧱 **Clean Architecture** structure for testability and maintainability
+
+---
+
+## 🧰 Tech Stack
+
+| Layer           | Stack / Packages                              |
+|------------------|-----------------------------------------------|
+| Backend          | [Supabase](https://supabase.io) (auth + DB)   |
+| State Mgmt       | [flutter_bloc](https://pub.dev/packages/flutter_bloc) |
+| Architecture     | Clean Architecture (feature-first foldering)  |
+| Storage          | [shared_preferences](https://pub.dev/packages/shared_preferences) |
+| Emoji Support    | [emoji_picker_flutter](https://pub.dev/packages/emoji_picker_flutter) |
+| Notifications    | [toastification](https://pub.dev/packages/toastification) |
+| UI Framework     | Flutter (Material Design)                     |
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the repo
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/rishikesh-dev/chat_app.git
