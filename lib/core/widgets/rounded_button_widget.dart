@@ -22,7 +22,7 @@ class RoundedButtonWidget extends StatelessWidget {
           backgroundColor: bgColor ?? Theme.of(context).cardColor,
           foregroundColor:
               foregroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

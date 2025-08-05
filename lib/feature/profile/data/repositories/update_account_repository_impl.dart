@@ -1,9 +1,9 @@
-import 'package:chat_app/feature/profile/data/data_sources/remote_data_sources/supabase_account_data_source.dart';
+import 'package:chat_app/feature/profile/data/data_sources/remote_data_sources/remote_account_data_source.dart';
 import 'package:chat_app/feature/profile/domain/repositories/update_account_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class UpdateAccountRepositoryImpl extends UpdateAccountRepository {
-  final SupabaseAccountDataSource dataSource;
+  final RemoteAccountDataSource dataSource;
 
   UpdateAccountRepositoryImpl({required this.dataSource});
   @override

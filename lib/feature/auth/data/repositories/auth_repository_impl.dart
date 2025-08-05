@@ -1,10 +1,10 @@
-import 'package:chat_app/feature/auth/data/data_sources/remote_data_sources/supabase_auth_data_source.dart';
+import 'package:chat_app/feature/auth/data/data_sources/remote_data_sources/remote_auth_data_source.dart';
 import 'package:chat_app/feature/auth/domain/entities/auth_entity.dart';
 import 'package:chat_app/feature/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
-  final SupabaseAuthDataSource dataSource;
+  final RemoteAuthDataSource dataSource;
 
   AuthRepositoryImpl({required this.dataSource});
 

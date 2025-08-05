@@ -3,10 +3,10 @@ import 'package:chat_app/core/theme/theme_cubit.dart';
 import 'package:chat_app/feature/auth/presentation/screens/forgot_password.dart';
 import 'package:chat_app/feature/profile/presentation/bloc/update_account_bloc.dart';
 import 'package:chat_app/feature/profile/presentation/screens/my_account_screens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -82,19 +82,18 @@ class SettingsScreen extends StatelessWidget {
                           ).scaffoldBackgroundColor,
                           backgroundColor: Theme.of(context).cardColor,
                           child: Text(
-                            user.userMetadata?['name']
-                                    .toString()
-                                    .characters
-                                    .take(2)
-                                    .string ??
-                                '',
+                            user.displayName
+                                .toString()
+                                .characters
+                                .take(2)
+                                .string,
                           ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(user.userMetadata?['name']),
-                            Text(user.email ?? ''),
+                            Text(user.displayName ?? 'Unkown'),
+                            Text(user.email ?? 'Unkown'),
                           ],
                         ),
                         Spacer(),
@@ -184,7 +183,7 @@ class SettingsScreen extends StatelessWidget {
                                 TextButton(
                                   onPressed: () {
                                     context.read<UpdateAccountBloc>().add(
-                                      DeleteAccountEvent(userId: user.id),
+                                      DeleteAccountEvent(userId: user.uid),
                                     );
                                   },
                                   child: Text('Yes'),

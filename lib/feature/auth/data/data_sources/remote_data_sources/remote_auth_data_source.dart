@@ -1,21 +1,20 @@
 import 'package:chat_app/feature/auth/data/models/auth_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseAuthDataSource {
-  final SupabaseClient supabase;
+class RemoteAuthDataSource {
+  final FirebaseAuth auth;
 
-  SupabaseAuthDataSource({required this.supabase});
+  RemoteAuthDataSource({required this.auth});
   Future<Either<String, AuthModel>> createUser(
     String name,
     String email,
     String password,
   ) async {
     try {
-      final AuthResponse response = await supabase.auth.signUp(
+      final UserCredential response = await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-        data: {'name': name},
       );
 
       final user = response.user;
@@ -24,10 +23,10 @@ class SupabaseAuthDataSource {
           'User creation failed. Check if email verification is required.',
         );
       }
-
-      return right(AuthModel.fromDB(user.toJson()));
-    } on AuthException catch (e) {
-      final message = e.message.trim();
+      user.updateDisplayName(name);
+      return right(AuthModel.fromDB(user));
+    } on FirebaseException catch (e) {
+      final message = e.message!.trim();
       return left(
         message.isNotEmpty == true ? message : 'Authentication failed.',
       );
@@ -39,7 +38,7 @@ class SupabaseAuthDataSource {
     String password,
   ) async {
     try {
-      final AuthResponse response = await supabase.auth.signInWithPassword(
+      final UserCredential response = await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -48,9 +47,9 @@ class SupabaseAuthDataSource {
         return left('User sign In failed. Check if email exists.');
       }
 
-      return right(AuthModel.fromDB(user.toJson()));
-    } on AuthException catch (e) {
-      final code = e.code ?? 'unknown_error';
+      return right(AuthModel.fromDB(user));
+    } on FirebaseAuthException catch (e) {
+      final code = e.code;
       final message = code.contains('email_not_confirmed')
           ? 'Please confirm your email before signing in.'
           : code
@@ -68,10 +67,10 @@ class SupabaseAuthDataSource {
 
   Future<Either<String, void>> forgotPassword(String email) async {
     try {
-      await supabase.auth.resetPasswordForEmail(email);
+      await auth.sendPasswordResetEmail(email: email);
       return right(null);
-    } on AuthException catch (e) {
-      final message = e.message.trim();
+    } on FirebaseAuthException catch (e) {
+      final message = e.message!.trim();
       return left(
         message.isNotEmpty ? message : 'Failed to send password reset email.',
       );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "256737748742",
+    "project_id": "public-chat-app-2",
+    "storage_bucket": "public-chat-app-2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:256737748742:android:90165786a3ce1f7a556087",
+        "android_client_info": {
+          "package_name": "com.rishikesh.chat_app.chat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc0oQKIQspz7Nsoy3vc528WDTnkMA32ow"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

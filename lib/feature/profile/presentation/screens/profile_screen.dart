@@ -3,9 +3,9 @@ import 'package:chat_app/feature/profile/presentation/screens/my_account_screens
 import 'package:chat_app/feature/profile/presentation/screens/settings_screen.dart';
 import 'package:chat_app/feature/profile/presentation/widgets/profile_menu_widget.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -13,9 +13,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Supabase.instance.client.auth;
+    final auth = FirebaseAuth.instance;
     final user = auth.currentUser;
-    final String username = user?.userMetadata!['name'] ?? 'Unkown';
+    final String username = user?.displayName ?? 'Unkown';
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -97,8 +97,8 @@ class ProfilePic extends StatelessWidget {
           StreamBuilder(
             stream: Connectivity().onConnectivityChanged,
             builder: (context, connection) {
-              final connected =
-                  connection.connectionState == ConnectionState.active;
+              bool connected =
+                  connection.connectionState != ConnectionState.none;
               return Positioned(
                 right: -1,
                 bottom: 0,

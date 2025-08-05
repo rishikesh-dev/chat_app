@@ -150,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () => Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => SignUpScreen(),
                                 ),
                               ),

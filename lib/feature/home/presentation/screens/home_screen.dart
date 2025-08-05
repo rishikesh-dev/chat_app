@@ -2,10 +2,12 @@ import 'package:chat_app/feature/home/presentation/bloc/chat_bloc.dart';
 import 'package:chat_app/feature/home/presentation/widgets/chat_bubble.dart';
 import 'package:chat_app/feature/home/presentation/widgets/message_text_field.dart';
 import 'package:chat_app/feature/profile/presentation/screens/profile_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,16 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final supabase = Supabase.instance;
-    final auth = Supabase.instance.client.auth;
+    final auth = FirebaseAuth.instance;
+    final firestore = FirebaseFirestore.instance;
     final user = auth.currentUser;
 
     if (user == null) {
       setState(() {});
-      return CircularProgressIndicator();
+      return Loading();
     }
-    final currentUserId = user.id;
-    final name = user.userMetadata?['name'] ?? 'No name';
+    final currentUserId = user.uid;
+    final name = user.displayName ?? 'No name';
     return Scaffold(
       appBar: AppBar(
         forceMaterialTransparency: true,
@@ -64,38 +66,40 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: StreamBuilder(
-                stream: supabase.client
-                    .from('chats')
-                    .stream(primaryKey: ['id'])
-                    .order('time', ascending: false),
+                stream: firestore
+                    .collection('chats')
+                    .orderBy('time', descending: true)
+                    .snapshots(),
                 builder: (ctx, snapshots) {
                   if (snapshots.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: Loading());
                   }
                   if (snapshots.hasError) {
                     return Center(child: Text('Unable to fetch data.'));
+                  }
+                  if (snapshots.data == null) {
+                    return Center(child: Text('No data'));
                   }
                   if (snapshots.hasData) {
                     return ListView.builder(
                       reverse: true,
                       padding: EdgeInsets.only(bottom: 10),
-                      itemCount: snapshots.data?.length,
+                      itemCount: snapshots.data?.docs.length,
                       itemBuilder: (ctx, index) {
                         final messages = snapshots.data;
-                        final message = messages![index];
-                        // Determine if avatar should be shown
-                        final isMe = currentUserId == message['senderId'];
-                        final senderId = message['senderId'];
-                        final bool isLast = index == messages.length - 1;
+                        final message = messages?.docs[index];
+                        final isMe = currentUserId == message?['senderId'];
+                        final senderId = message?['senderId'];
+                        final bool isLast = index == messages!.docs.length - 1;
 
                         final bool showAvatar =
                             isLast ||
-                            messages[index + 1]['senderId'] != senderId;
+                            messages.docs[index + 1]['senderId'] != senderId;
                         return ChatBubble(
                           showAvatar: showAvatar,
                           isMe: isMe,
-                          message: message['message'],
-                          senderInitial: message['sender'] ?? 'U',
+                          message: message?['message'],
+                          senderInitial: message?['sender'] ?? 'U',
                         );
                       },
                     );
@@ -116,6 +120,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Loading extends StatelessWidget {
+  const Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Skeletonizer(
+      child: ListView.builder(
+        itemCount: 10,
+        itemBuilder: (ctx, index) {
+          return ChatBubble(
+            showAvatar: true,
+            isMe: index.isEven ? true : false,
+            message: 'Message $index',
+            senderInitial: '',
+          );
+        },
       ),
     );
   }

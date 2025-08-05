@@ -2,10 +2,10 @@ import 'package:chat_app/core/widgets/rounded_button_widget.dart';
 import 'package:chat_app/core/widgets/text_field_widget.dart';
 import 'package:chat_app/feature/auth/presentation/screens/forgot_password.dart';
 import 'package:chat_app/feature/profile/presentation/bloc/update_account_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:toastification/toastification.dart';
 
 class MyAccountScreens extends StatefulWidget {
@@ -24,7 +24,7 @@ class _MyAccountScreensState extends State<MyAccountScreens> {
   void initState() {
     super.initState();
 
-    username = widget.user.userMetadata?['name'] ?? 'Unkown';
+    username = widget.user.displayName ?? 'Unkown';
     _emailController = TextEditingController(text: widget.user.email);
     _nameController = TextEditingController(text: username);
   }
@@ -141,7 +141,7 @@ class _MyAccountScreensState extends State<MyAccountScreens> {
                             TextButton(
                               onPressed: () {
                                 context.read<UpdateAccountBloc>().add(
-                                  DeleteAccountEvent(userId: widget.user.id),
+                                  DeleteAccountEvent(userId: widget.user.uid),
                                 );
                               },
                               child: Text('Yes'),

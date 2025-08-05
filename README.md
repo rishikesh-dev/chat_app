@@ -20,7 +20,7 @@ A clean and modern real-time **one-to-one chat application** built with **Flutte
 
 | Layer           | Stack / Packages                              |
 |------------------|-----------------------------------------------|
-| Backend          | [Supabase](https://supabase.io) (auth + DB)   |
+| Backend          | [Firebase](https://console.firebase.google.com/) (auth + DB)   |
 | State Mgmt       | [flutter_bloc](https://pub.dev/packages/flutter_bloc) |
 | Architecture     | Clean Architecture (feature-first foldering)  |
 | Storage          | [shared_preferences](https://pub.dev/packages/shared_preferences) |

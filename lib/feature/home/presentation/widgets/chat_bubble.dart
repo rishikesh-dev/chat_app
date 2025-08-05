@@ -23,7 +23,7 @@ class ChatBubble extends StatelessWidget {
     final senderCard = CircleAvatar(
       backgroundColor: Theme.of(context).cardColor,
       foregroundColor: Theme.of(context).scaffoldBackgroundColor,
-      radius: 24,
+      radius: 20,
       child: Text(senderInitial.characters.take(2).string),
     );
     final bubble = Bubble(

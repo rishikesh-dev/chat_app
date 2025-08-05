@@ -151,7 +151,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ..onTap = () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
+                                    CupertinoPageRoute(
                                       builder: (context) => SignInScreen(),
                                     ),
                                   );
