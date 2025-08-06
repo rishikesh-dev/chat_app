@@ -9,6 +9,7 @@ import 'package:chat_app/feature/auth/presentation/screens/welcome_screen.dart';
 import 'package:chat_app/feature/home/data/data_sources/remote_data_sources/remote_chat_data_source.dart';
 import 'package:chat_app/feature/home/data/repositories/chat_repository_impl.dart';
 import 'package:chat_app/feature/home/domain/use_cases/send_message_use_case.dart';
+import 'package:chat_app/feature/home/domain/use_cases/stream_messages_use_case.dart';
 import 'package:chat_app/feature/home/presentation/bloc/chat_bloc.dart';
 import 'package:chat_app/feature/home/presentation/screens/home_screen.dart';
 import 'package:chat_app/feature/profile/data/data_sources/remote_data_sources/remote_account_data_source.dart';
@@ -27,8 +28,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     MultiBlocProvider(
@@ -56,6 +57,14 @@ void main() async {
         BlocProvider(
           create: (ctx) => ChatBloc(
             SendMessageUseCase(
+              repository: ChatRepositoryImpl(
+                dataSource: RemoteChatDataSource(
+                  auth: FirebaseAuth.instance,
+                  firestore: FirebaseFirestore.instance,
+                ),
+              ),
+            ),
+            StreamMessagesUseCase(
               repository: ChatRepositoryImpl(
                 dataSource: RemoteChatDataSource(
                   auth: FirebaseAuth.instance,

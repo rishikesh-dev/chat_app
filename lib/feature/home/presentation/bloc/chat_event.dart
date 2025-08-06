@@ -8,3 +8,5 @@ class SendMessageEvent extends ChatEvent {
 
   SendMessageEvent({required this.message});
 }
+
+class StreamMessageEvent extends ChatEvent {}

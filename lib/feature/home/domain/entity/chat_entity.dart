@@ -1,10 +1,12 @@
 abstract class ChatEntity {
+  final String id;
   final String senderId;
   final String message;
   final String sender;
   final DateTime time;
 
   ChatEntity({
+    required this.id,
     required this.senderId,
     required this.message,
     required this.sender,

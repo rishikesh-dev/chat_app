@@ -3,4 +3,5 @@ import 'package:fpdart/fpdart.dart';
 
 abstract class ChatRepository {
   Future<Either<String, ChatEntity>> sendMessage(String message);
+  Stream<Either<String, List<ChatEntity>>> streamMessage();
 }

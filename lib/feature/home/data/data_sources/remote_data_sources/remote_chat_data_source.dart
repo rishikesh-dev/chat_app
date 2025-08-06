@@ -7,21 +7,50 @@ class RemoteChatDataSource {
   final FirebaseAuth auth;
   final FirebaseFirestore firestore;
   RemoteChatDataSource({required this.firestore, required this.auth});
+  Stream<Either<String, List<ChatModel>>> streamMessage() {
+    try {
+      final response = firestore
+          .collection('chats')
+          .orderBy('time', descending: true)
+          .limit(50)
+          .snapshots();
 
-  /// Send a message to Supabase
+      return response.map((snapshot) {
+        final message = snapshot.docs.map((doc) {
+          return ChatModel.fromjson(doc);
+        }).toList();
+        return right<String, List<ChatModel>>(message);
+      });
+    } catch (e) {
+      return Stream.value(left('Failed to fetch messages :$e'));
+    }
+  }
+
+  /// Send a message to Firebase
   Future<Either<String, ChatModel>> sendMessage(String message) async {
     final user = auth.currentUser;
     if (user == null) return left("User not authenticated");
 
     try {
-      final response = await firestore.collection('chats').add({
+      final now = DateTime.now();
+      final chatMap = {
         'senderId': user.uid,
-        'message': message,
         'sender': user.displayName ?? 'Anonymous',
-        'time': DateTime.now().toIso8601String(),
-      });
-      final data = response;
-      return right(ChatModel.fromjson(data as Map<String, dynamic>));
+        'message': message,
+        'time': now,
+      };
+
+      final docRef = await firestore.collection('chats').add(chatMap);
+
+      final chatWithId = ChatModel(
+        id: docRef.id,
+        senderId: user.uid,
+        sender: user.displayName ?? 'Anonymous',
+        message: message,
+        time: now,
+      );
+
+      return right(chatWithId);
     } catch (e) {
       return left('Failed to send message: $e');
     }

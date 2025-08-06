@@ -10,6 +10,11 @@ class ChatRepositoryImpl extends ChatRepository {
   @override
   @override
   Future<Either<String, ChatEntity>> sendMessage(String message) async {
-    return await dataSource.sendMessage(message);
+    return  dataSource.sendMessage(message);
+  }
+
+  @override
+  Stream<Either<String, List<ChatEntity>>> streamMessage() {
+    return dataSource.streamMessage();
   }
 }

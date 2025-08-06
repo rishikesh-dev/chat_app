@@ -19,4 +19,9 @@ class SendMessageSuccess extends ChatState {
   SendMessageSuccess({required this.chat});
 }
 
+//Stream message
+class StreamMessageSuccess extends ChatState {
+  final List<ChatEntity> chats;
 
+  StreamMessageSuccess({required this.chats});
+}
