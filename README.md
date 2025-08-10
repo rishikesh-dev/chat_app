@@ -6,7 +6,7 @@ A clean and modern real-time **one-to-one chat application** built with **Flutte
 
 ## ✨ Features
 
-- 🔐 **Authentication** with Supabase (email/password)
+- 🔐 **Authentication** with Firebase (email/password)[migrated from supabase']
 - 💬 **Real-time one-to-one messaging**
 - 😄 **Emoji picker** support
 - 🔔 **Toast notifications** via `toastification`
